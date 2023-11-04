@@ -58,6 +58,7 @@ function openUploadModal(component, callback) {
         },
         async (error, result) => {
             if (!error && result && result.event === "success") {
+                // console.log('Done uploading..: ', result.info);
                 if (typeof callback === 'function') {
                     callback({
                         "url": result.info.url,

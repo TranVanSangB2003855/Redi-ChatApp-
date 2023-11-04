@@ -141,6 +141,7 @@ export const useStore = defineStore("store", {
                     }
                     SocketioService.setupSocketFriendConnection(this.user.token, this.user.phone);
                     SocketioService.receiveMessageFriend((err, data) => {
+                        // console.log(data);
                         if (data.roomID === this.currentChatRoom._id) {
                             data.seen = true
                             this.currentChatRoom.messages.push(data);
@@ -166,7 +167,9 @@ export const useStore = defineStore("store", {
             Redi.autoSrcollTop(".content_body");
         },
         updateMessages(roomId) {
+            // console.log("updateMessages");
             if (this.currentChatRoom._id === roomId) {
+                // console.log("updating Messages");
                 this.currentChatRoom.messages.forEach(message => {
                     if (!message.seen) {
                         message.seen = true;

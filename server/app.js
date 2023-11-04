@@ -86,7 +86,7 @@ ioChatWithStranger.on('connection', (socket) => {
     clientRoom = getClientRoomStranger(preRoom, socket.id);
     console.log("clientRoomNew: " + clientRoom + ".....");
     socket.join(clientRoom);
-    if (ioChatWithStranger.sockets.adapter.rooms.get(clientRoom).size < 2) {
+    if (ioChatWithStranger.sockets.adapter.rooms.get(clientRoom).size < 2) {//.length < 2) {
       ioChatWithStranger.in(clientRoom).emit('statusRoomStranger', {
         content: 'Đang đợi người lạ ...',
         createAt: redi.getTime()
@@ -99,7 +99,7 @@ ioChatWithStranger.on('connection', (socket) => {
     }
   })
 
-  if (ioChatWithStranger.sockets.adapter.rooms.get(clientRoom).size < 2) {
+  if (ioChatWithStranger.sockets.adapter.rooms.get(clientRoom).size < 2) {//.length < 2) {
     ioChatWithStranger.in(clientRoom).emit('statusRoomStranger', {
       content: 'Đang đợi người lạ ...',
       createAt: redi.getTime()
@@ -136,7 +136,7 @@ ioChatWithStranger.on('connection', (socket) => {
   })
 
   socket.on("disconnecting", (reason) => {
-    console.log("[Socket Stranger] Bị ngắt kết nối đo: "+reason);
+    console.log("[Socket Stranger] Bị ngắt kết nối do: "+reason);
   });
 });
 

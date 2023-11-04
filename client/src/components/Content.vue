@@ -275,8 +275,10 @@ export default {
                 this.url = ''
             }
             if (!message) return;
+            console.log("sending message friend....");
             SocketioService.sendMessageFriend(message, cb => {
                 // callback is acknowledgement from server
+                // console.log(cb);
                 this.currentChatRoom.messages.push({
                     ...message,
                     createAt: cb.createAt,
@@ -286,20 +288,45 @@ export default {
                 Redi.autoSrcollTop(".content_body");
             });
         },
-        openUploadModal() {
-            Redi.openUploadModal("Content", (data) => {
-                this.url = data.url;
-                if (this.currentChatRoom._id === '000') {
-                    this.sendMessageStranger('image');
-                } else {
-                    this.sendMessageFriend('image');
-                }
-            })
+        // openUploadModal() {
+        //     Redi.openUploadModal("Content", (data) => {
+        //         this.url = data.url;
+        //         if (this.currentChatRoom._id === '000') {
+        //             this.sendMessageStranger('image');
+        //         } else {
+        //             this.sendMessageFriend('image');
+        //         }
+        //     })
 
+        // },
+        openUploadModal() {
+            window.cloudinary.createUploadWidget(
+                {
+                    cloud_name: 'dwnunieno',
+                    upload_preset: 'ma9pfovj',
+                    maxImageFileSize: 10000000,
+                    autoMinimize: true,
+                    sources: ["local"],
+                    clientAllowedFormats: ["image"],
+                    maxFiles: 5
+                },
+                (error, result) => {
+                    if (!error && result && result.event === "success") {
+                        console.log('Done uploading..: ', result.info);
+                        this.url = result.info.url;
+                        console.log(this.url)
+                        if (this.currentChatRoom._id === '000') {
+                            this.sendMessageStranger('image');
+                        } else {
+                            this.sendMessageFriend('image');
+                        }
+                    }
+                }).open();
         },
         connectSocketStranger() {
             setTimeout(() => {
                 const chatRoom = this.chatRoomStranger;
+                // console.log(chatRoom)
                 if (chatRoom !== '') {
                     this.messagesChatWithStranger = [{ content: "Đang đợi người lạ ...", name: "Bot" }];
                     Redi.disableElements(this.eFormInput.concat(this.eNewChat), true);
@@ -309,6 +336,7 @@ export default {
                 else {
                     SocketioService.setupSocketStrangerConnection();
                     SocketioService.statusRoomStranger((err, data) => {
+                        // console.log(data);
                         if (data.content === 'Đang đợi người lạ ...') {
                             Redi.disableElements(this.eFormInput.concat(this.eNewChat), true);
                             Redi.disableElements(this.eStopChat, false);
@@ -340,6 +368,7 @@ export default {
                         });
                     });
                     SocketioService.receiveMessageStranger((err, data) => {
+                        // console.log(data);
                         this.messagesChatWithStranger.push(data);
                     });
                 }
@@ -358,8 +387,10 @@ export default {
                 this.url = ''
             }
             if (!message) return;
+            console.log("sending message stranger....");
             SocketioService.sendMessageStranger(message, cb => {
                 // callback is acknowledgement from server
+                // console.log(cb);
                 this.messagesChatWithStranger.push({
                     ...message,
                     createAt: cb.createAt,

@@ -249,6 +249,7 @@ export default {
         chatRoomsString() {
             let x = this.user.chatRooms.map(chatRoom => {
                 if (chatRoom._id === "000") return "";
+                // console.log(chatRoom.owner)
                 const id = (chatRoom.owner[0] === this.user._id) ? chatRoom.owner[1] : chatRoom.owner[0];
                 let phone;
                 this.user.contacts.forEach(contact => {
@@ -258,6 +259,7 @@ export default {
                 })
                 return [phone, Redi.removeAccents(chatRoom.fullNameFriend)].join("");
             })
+            // console.log(x);
             return x;
         },
         chatRooms() {
@@ -332,6 +334,7 @@ export default {
                         useStore().setInfoUser(user.message);
                         SocketioService.setupSocketFriendConnection(user.message.token, user.message.phone);
                         SocketioService.receiveMessageFriend((err, data) => {
+                            // console.log(data);
                             if (data.roomID === this.currentChatRoom._id) {
                                 data.seen = true;
                                 this.currentChatRoom.messages.push(data);
@@ -430,6 +433,7 @@ export default {
                     password: "",
                 };
                 SocketioService.receiveMessageFriend((err, data) => {
+                    // console.log(data);
                     if (data.roomID === this.currentChatRoom._id) {
                         data.seen = true;
                         this.currentChatRoom.messages.push(data);
@@ -445,6 +449,7 @@ export default {
                     })
                 });
                 setTimeout(this.$refs.formSignIn.resetForm, 1000);
+                // if (meg) console.log(meg.message);
             } catch (error) {
                 alert(error.response.data.message.toString())
             }
@@ -475,6 +480,7 @@ export default {
             if (!check) return;
             SocketioService.findUserByPhone(this.searchText);
             this.checkSearchByPhone = true;
+            // console.log(this.searchText);
             this.currentChatRoom = {
                 fullName: "",
                 avatar: "",
@@ -483,6 +489,7 @@ export default {
             }
             if (this.statusMenu === 'chat')
                 this.statusContent = 'noChatSelected'
+            // this.searchText = ''
         },
         sendFriendRequest() {
             SocketioService.sendFriendRequest(this.foundUserByPhone.phone);
@@ -494,8 +501,8 @@ export default {
                 phone: "",
                 sentFriendRequest: false
             }
-            this.statusSidebar = 'chat';
-            this.statusMenu = 'chat'
+            // this.statusSidebar = 'chat';
+            // this.statusMenu = 'chat'
         }
     },
 }
